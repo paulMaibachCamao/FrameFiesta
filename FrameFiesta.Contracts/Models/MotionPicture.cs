@@ -10,6 +10,5 @@
         public List<string> Genre { get; set; }
         public DateTime InitialRelease { get; set; }
         public List<string> Comments { get; set; }
-        public List<BlogPost> RelatedBlogPosts { get; set; }
     }
 }

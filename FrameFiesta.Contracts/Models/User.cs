@@ -1,11 +1,14 @@
-﻿namespace FrameFiesta.Contracts.Models
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace FrameFiesta.Contracts.Models
 {
     public class User
     {
-        public int Id { get; set; }
-        public bool IsAdmin { get; set; }
+        [BsonId]
+        public string Id { get; set; }
+
         public string Name { get; set; }
         public string Email { get; set; }
-        public List<Comment> Comments { get; set; }
+        public List<UserComment> Comments { get; set; } = new List<UserComment>();
     }
 }

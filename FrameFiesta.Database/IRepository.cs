@@ -1,4 +1,5 @@
 ﻿using FrameFiesta.Contracts.Models;
+using MongoDB.Driver;
 
 namespace FrameFiesta.Database
 {
@@ -6,18 +7,19 @@ namespace FrameFiesta.Database
     {
         DatabaseConfiguration GetConfiguration();
 
-        Task<BlogPost> Get(int id);
+        Task<BlogPostDb> Get(int id);
 
-        Task<bool> Post(BlogPost blog);
+        Task<bool> Post(BlogPostDb blog);
 
-        Task<bool> Update(BlogPost blog);
+        Task<bool> Update(BlogPostDb blog);
 
         Task<bool> Delete(int id);
 
         Task<string> GetSalt(string userIdentification);
 
-        Task<UserDB> Login(string userIdentification, string password);
+        IMongoDatabase GetDatabase();
 
-        Task<bool> Register<T>(RegisterRequest registerRequest);
+        DatabaseConfiguration GetDatabaseConfiguration();
+        Task PostAsync(FrameFiestaDocument frameFiestaDocument);
     }
 }

@@ -9,6 +9,7 @@ namespace FrameFiesta.Database
         {
             services.AddTransient(x =>  databaseConfiguration);
             services.AddSingleton<IRepository, Repository>();
+            services.AddSingleton<IDatabaseService, DatabaseService>();
         }
     }
 }

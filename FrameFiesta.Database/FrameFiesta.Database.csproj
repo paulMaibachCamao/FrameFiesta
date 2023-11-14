@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FrameFiesta.Authentication\FrameFiesta.Authentication.csproj" />
     <ProjectReference Include="..\FrameFiesta.Contracts\FrameFiesta.Contracts.csproj" />
+    <ProjectReference Include="..\FrameFiesta.Utilities\FrameFiesta.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

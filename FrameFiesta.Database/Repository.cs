@@ -10,14 +10,22 @@ namespace FrameFiesta.Database
     {
         private readonly DatabaseConfiguration _databaseConfiguration;
         private readonly IMongoDatabase _database;
-        private readonly ICryptographyService _cryptographyService;
 
-        public Repository(DatabaseConfiguration databaseConfiguration, ICryptographyService cryptographyService)
+        public Repository(DatabaseConfiguration databaseConfiguration)
         {
             _databaseConfiguration = databaseConfiguration;
             var client = new MongoClient(_databaseConfiguration.ConnectionString);
             _database = client.GetDatabase(_databaseConfiguration.DataBaseName);
-            _cryptographyService = cryptographyService;
+        }
+
+        public IMongoDatabase GetDatabase()
+        {
+            return _database;
+        }
+
+        public DatabaseConfiguration GetDatabaseConfiguration()
+        {
+            return _databaseConfiguration;
         }
 
         public Task<bool> Delete(int id)
@@ -25,47 +33,9 @@ namespace FrameFiesta.Database
             throw new NotImplementedException();
         }
 
-        public Task<BlogPost> Get(int id)
+        public Task<BlogPostDb> Get(int id)
         {
             throw new NotImplementedException();
-        }
-
-        public Task<UserDB> Login(string userIdentification, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> Register<T>(RegisterRequest registerRequest)
-        {
-            var collection = _database.GetCollection<T>(_databaseConfiguration.CollectionName);
-
-            var filter = Builders<T>.Filter.Or(
-                Builders<T>.Filter.Eq("Name", registerRequest.Name),
-                Builders<T>.Filter.Eq("Email", registerRequest.Email)
-            );
-
-            var existingUser = (await collection.FindAsync<T>(filter)).FirstOrDefault();
-
-            if (existingUser != null)
-            {
-                return false;
-            }
-
-            var newUser = new UserDB
-            {
-                Name = registerRequest.Name,
-                Email = registerRequest.Email,
-                Salt = _cryptographyService.GenerateSalt(),
-            };
-
-            newUser.Password = _cryptographyService.Hash(registerRequest.Password, newUser.Salt);
-
-            var collectionFrameFiesta = _database.GetCollection<FrameFiestaDocument>(_databaseConfiguration.CollectionName);
-            var filterFrameFiesta = Builders<FrameFiestaDocument>.Filter.Eq(doc => doc.Id, "Entities");
-            var update = Builders<FrameFiestaDocument>.Update.Push(doc => doc.Users, newUser);
-            var result = await collectionFrameFiesta.UpdateOneAsync(filterFrameFiesta, update);
-
-            return result.ModifiedCount > 0;
         }
 
         public DatabaseConfiguration GetConfiguration()
@@ -93,12 +63,18 @@ namespace FrameFiesta.Database
             return null;
         }
 
-        public Task<bool> Post(BlogPost blog)
+        public Task<bool> Post(BlogPostDb blog)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Update(BlogPost blog)
+        public async Task PostAsync(FrameFiestaDocument frameFiestaDocument)
+        {
+            var collection = _database.GetCollection<FrameFiestaDocument>(_databaseConfiguration.CollectionName);
+            await collection.InsertOneAsync(frameFiestaDocument);
+        }
+
+        public Task<bool> Update(BlogPostDb blog)
         {
             throw new NotImplementedException();
         }

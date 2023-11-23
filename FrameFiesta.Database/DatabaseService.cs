@@ -4,6 +4,7 @@ using FrameFiesta.Utilities.ExtensionMethods.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 
 namespace FrameFiesta.Database
 {
@@ -38,7 +39,59 @@ namespace FrameFiesta.Database
             return _cryptographyService.Hash(password, existingUser.Salt) == existingUser.Password ? existingUser.ConvertUserDbToUser() : null;
         }
 
-        public async Task<bool> Register<T>(RegisterRequest registerRequest)
+        public async Task<bool> DeleteUser(string userIdentification, string password)
+        {
+            var collection = _repository.GetDatabase().GetCollection<FrameFiestaDocument>(_repository.GetDatabaseConfiguration().CollectionName);
+            await PostDocumentIfCollectionIsEmpty(collection).ConfigureAwait(false);
+
+            var query = from doc in collection.AsQueryable()
+                        where doc.Users.Any(u => u.Name == userIdentification || u.Email == userIdentification)
+                        select doc;
+
+            var existingUser = query.FirstOrDefault()
+                                ?.Users.FirstOrDefault(u => u.Name == userIdentification || u.Email == userIdentification);
+
+            if (existingUser == null)
+            {
+                return false;
+            }
+
+            if (_cryptographyService.Hash(password, existingUser.Salt) == existingUser.Password)
+            {
+                var blogPosts = await GetAllBlogPosts().ConfigureAwait(false);
+
+                foreach (var blogPost in blogPosts)
+                {
+                    foreach (var comment in blogPost.Comments)
+                    {
+                        if (existingUser.Comments.Any(x => x.ID == comment.Id))
+                        {
+                            var filterComment = Builders<FrameFiestaDocument>.Filter.And(
+                Builders<FrameFiestaDocument>.Filter.Eq(doc => doc.Id, "Entities"),
+                Builders<FrameFiestaDocument>.Filter.ElemMatch(doc => doc.BlogPosts, bp => bp.Id == blogPost.Id)
+                            );
+
+                            var updateComment = Builders<FrameFiestaDocument>.Update.PullFilter("BlogPosts.$.Comments", Builders<BlogComment>.Filter.Eq(c => c.CommentId, comment.Id));
+                            var resultComment = await collection.UpdateOneAsync(filterComment, updateComment).ConfigureAwait(false);
+                        }
+                    }
+                }
+
+                var filter = Builders<FrameFiestaDocument>.Filter.And(
+                Builders<FrameFiestaDocument>.Filter.Eq(doc => doc.Id, "Entities"),
+                Builders<FrameFiestaDocument>.Filter.ElemMatch(doc => doc.Users, bp => bp.Id == existingUser.Id)
+                );
+
+                var update = Builders<FrameFiestaDocument>.Update.PullFilter("Users", Builders<UserDb>.Filter.Eq(c => c.Id, existingUser.Id));
+                var result = await collection.UpdateOneAsync(filter, update).ConfigureAwait(false);
+
+                return result.ModifiedCount > 0;
+            }
+
+            return false;
+        }
+
+        public async Task<User> Register<T>(RegisterRequest registerRequest)
         {
             var collection = _repository.GetDatabase().GetCollection<FrameFiestaDocument>(_repository.GetDatabaseConfiguration().CollectionName);
             await PostDocumentIfCollectionIsEmpty(collection).ConfigureAwait(false);
@@ -52,10 +105,10 @@ namespace FrameFiesta.Database
 
             if (existingUser != null)
             {
-                return false;
+                return existingUser.ConvertUserDbToUser();
             }
 
-            var newUser = new UserDB
+            var newUser = new UserDb
             {
                 Name = registerRequest.Name,
                 Email = registerRequest.Email,
@@ -69,7 +122,7 @@ namespace FrameFiesta.Database
             var update = Builders<FrameFiestaDocument>.Update.Push(doc => doc.Users, newUser);
             var result = await collectionFrameFiesta.UpdateOneAsync(filterFrameFiesta, update).ConfigureAwait(false);
 
-            return result.ModifiedCount == 1;
+            return newUser.ConvertUserDbToUser();
         }
 
         public async Task<bool> IsCollectionEmptyAsync<T>(IMongoCollection<T> collection)
@@ -167,7 +220,7 @@ namespace FrameFiesta.Database
                 Builders<FrameFiestaDocument>.Filter.ElemMatch(doc => doc.BlogPosts, bp => bp.Id == blogId)
             );
 
-            var update = Builders<FrameFiestaDocument>.Update.PullFilter("BlogPosts.$.Comments", Builders<UserComment>.Filter.Eq(c => c.ID, commentId));
+            var update = Builders<FrameFiestaDocument>.Update.PullFilter("BlogPosts.$.Comments", Builders<BlogComment>.Filter.Eq(c => c.CommentId, commentId));
             var result = await collection.UpdateOneAsync(filter, update).ConfigureAwait(false);
 
             var userFilter = Builders<FrameFiestaDocument>.Filter.And(
@@ -180,7 +233,7 @@ namespace FrameFiesta.Database
             return result.ModifiedCount > 0;
         }
 
-        public async Task<List<UserDB>> GetAllUsers()
+        public async Task<List<UserDb>> GetAllUsers()
         {
             var collection = _repository.GetDatabase().GetCollection<FrameFiestaDocument>(_repository.GetDatabaseConfiguration().CollectionName);
             var documents = await collection.Find(_ => true).ToListAsync().ConfigureAwait(false);
@@ -196,32 +249,25 @@ namespace FrameFiesta.Database
             }
         }
 
-        public async Task<BlogPostFe> AddBlogPost(string description, string review, MotionPicture motionPicture)
+        public async Task<BlogPostFe> AddBlogPost(BlogPostDb blogPost)
         {
             var collection = _repository.GetDatabase().GetCollection<FrameFiestaDocument>(_repository.GetDatabaseConfiguration().CollectionName);
             await PostDocumentIfCollectionIsEmpty(collection).ConfigureAwait(false);
 
-            var blogPostDb = new BlogPostDb
-            {
-                Date = DateTime.Now,
-                Description = description,
-                Review = review,
-                RelatedMotionPicture = motionPicture
-            };
-
+            blogPost.Id = Guid.NewGuid().ToString();
             var filter = Builders<FrameFiestaDocument>.Filter.Eq(doc => doc.Id, "Entities");
-            var update = Builders<FrameFiestaDocument>.Update.Push(doc => doc.BlogPosts, blogPostDb);
+            var update = Builders<FrameFiestaDocument>.Update.Push(doc => doc.BlogPosts, blogPost);
             var result = await collection.UpdateOneAsync(filter, update).ConfigureAwait(false);
 
             if (result.ModifiedCount == 1)
             {
                 return new BlogPostFe
                 {
-                    Id = blogPostDb.Id,
-                    Date = blogPostDb.Date,
-                    Description = blogPostDb.Description,
-                    Review = blogPostDb.Review,
-                    RelatedMotionPicture = blogPostDb.RelatedMotionPicture,
+                    Id = blogPost.Id,
+                    Date = blogPost.Date,
+                    Description = blogPost.Description,
+                    Review = blogPost.Review,
+                    RelatedMotionPicture = blogPost.RelatedMotionPicture,
                     Comments = new List<CommentFe>()
                 };
             }

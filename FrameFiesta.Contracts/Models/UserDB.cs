@@ -2,7 +2,7 @@
 
 namespace FrameFiesta.Contracts.Models
 {
-    public class UserDB
+    public class UserDb
     {
         [BsonId]
         public string Id { get; set; } = Guid.NewGuid().ToString();

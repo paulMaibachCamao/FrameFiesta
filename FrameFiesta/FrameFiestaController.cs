@@ -1,5 +1,6 @@
 ﻿using FrameFiesta.Contracts.Models;
 using FrameFiesta.Database;
+using FrameFiesta.Utilities.ExtensionMethods.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FrameFiesta.Api
@@ -18,154 +19,117 @@ namespace FrameFiesta.Api
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequest loginRequest)
         {
-            var user = await _databaseService.Login(loginRequest.UserIdentification, loginRequest.Password).ConfigureAwait(false);
-            if (user == null)
+            try
             {
-                return NotFound();
-            }
+                var user = await _databaseService.Login(loginRequest.UserIdentification, loginRequest.Password).ConfigureAwait(false);
+                if (user == null)
+                {
+                    return NotFound("User not found");
+                }
 
-            return Ok(user);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest registrationRequest)
         {
-            var result = await _databaseService.Register<FrameFiestaDocument>(registrationRequest).ConfigureAwait(false);
-            if (result)
-            {
-                return Ok(result);
-            }
-
-            return BadRequest(result);
-        }
-
-        [HttpPut("blogpost")]
-        public async Task<IActionResult> AddBlogPost(string description, string review, [FromBody] MotionPicture motionPicture)
-        {
             try
             {
-                if (motionPicture is Series)
+                var result = await _databaseService.Register<FrameFiestaDocument>(registrationRequest).ConfigureAwait(false);
+                if (result != null)
                 {
-                    var seriesResult = await _databaseService.AddBlogPost(description, review, (Series)motionPicture).ConfigureAwait(false);
-                    return seriesResult != null ? Ok(seriesResult) : StatusCode(500, null);
+                    return Ok(result);
                 }
 
-                if (motionPicture is Film)
-                {
-                    var filmResult = await _databaseService.AddBlogPost(description, review, (Film)motionPicture).ConfigureAwait(false);
-                    return filmResult != null ? Ok(filmResult) : StatusCode(500, null);
-                }
-                var result = await _databaseService.AddBlogPost(description, review, motionPicture).ConfigureAwait(false);
-                return result != null ? Ok(result) : StatusCode(500, null);
+                return BadRequest(result);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete("user")]
+        public async Task<IActionResult> DeleteUserAsync(string userIdentification,[FromBody] string password)
+        {
+            try
+            {
+                var result = await _databaseService.DeleteUser(userIdentification, password).ConfigureAwait(false);
+                return result == true ? Ok(result) : BadRequest(result);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut("blogpost")]
+        public async Task<IActionResult> AddBlogPost([FromBody] BlogPostDb blogPost)
+        {
+            try
+            {
+                if (blogPost == null)
+                {
+                    return BadRequest("Blog post is null.");
+                }
+
+                var result = await _databaseService.AddBlogPost(blogPost).ConfigureAwait(false);
+                var users = await _databaseService.GetAllUsers().ConfigureAwait(false);
+                return StatusCode(201, result.ConvertToJsonObject(users));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 
         [HttpPut("comment")]
         public async Task<IActionResult> AddComment(string userIdentification, [FromBody] string password, string blogId, string comment)
         {
-            var result = await _databaseService.AddComment(userIdentification, password, blogId, comment).ConfigureAwait(false);
-            return result != null ? Ok(result) : StatusCode(500, null);
+            try
+            {
+                var result = await _databaseService.AddComment(userIdentification, password, blogId, comment).ConfigureAwait(false);
+                return result != null ? Ok(result) : StatusCode(500, null);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpDelete("comment")]
         public async Task<IActionResult> DeleteComment(string userIdentification, [FromBody] string password, string blogId, string commentId)
         {
-            var result = await _databaseService.DeleteComment(userIdentification, password, blogId, commentId).ConfigureAwait(false);
-            return result != null ? Ok(result) : StatusCode(500, null);
+            try
+            {
+                var result = await _databaseService.DeleteComment(userIdentification, password, blogId, commentId).ConfigureAwait(false);
+                return result == true ? Ok(result) : StatusCode(500, null);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("blogposts")]
         public async Task<IActionResult> GetBlogPosts()
         {
-            var blogPosts = await _databaseService.GetAllBlogPosts().ConfigureAwait(false);
-            var users = await _databaseService.GetAllUsers().ConfigureAwait(false);
-            var objects = blogPosts.Select(blogPost => ConvertToJsonObject(blogPost, users)).ToList();
-            return Ok(objects);
-        }
-
-        private object ConvertToJsonObject(BlogPostFe blogPost, IEnumerable<UserDB> users)
-        {
-            var motionPicture = blogPost.RelatedMotionPicture;
-
-            var commentsFe = blogPost.Comments.Select(bc =>
+            try
             {
-                var user = users.FirstOrDefault(u => u.Name == bc.Name);
-                return new CommentFe
-                {
-                    Id = bc.Id,
-                    Text = user?.Comments.FirstOrDefault(uc => uc.ID == bc.Id)?.Text,
-                    Date = user?.Comments.FirstOrDefault(uc => uc.ID == bc.Id)?.CreatedAt ?? default,
-                    Name = user?.Name
-                };
-            }).ToList();
-
-            if (motionPicture is Series series)
-            {
-                return new
-                {
-                    blogPost.Id,
-                    blogPost.Date,
-                    blogPost.Description,
-                    blogPost.Review,
-                    Comments = commentsFe,
-                    RelatedMotionPicture = new
-                    {
-                        series.Title,
-                        series.Country,
-                        series.Director,
-                        series.Actors,
-                        series.Rating,
-                        series.Image,
-                        series.Genres,
-                        series.InitialRelease,
-                        series.Seasons,
-                        series.Episodes,
-                        Type = "Series"
-                    }
-                };
+                var blogPosts = await _databaseService.GetAllBlogPosts().ConfigureAwait(false);
+                var users = await _databaseService.GetAllUsers().ConfigureAwait(false);
+                var objects = blogPosts.Select(blogPost => blogPost.ConvertToJsonObject(users)).ToList();
+                return Ok(objects);
             }
-            else if (motionPicture is Film film)
+            catch (Exception ex)
             {
-                return new
-                {
-                    blogPost.Id,
-                    blogPost.Date,
-                    blogPost.Description,
-                    blogPost.Review,
-                    Comments = commentsFe,
-                    RelatedMotionPicture = new
-                    {
-                        film.Title,
-                        film.Country,
-                        film.Director,
-                        film.Actors,
-                        film.Rating,
-                        film.Image,
-                        film.Genres,
-                        film.InitialRelease,
-                        film.RunTime,
-                        Type = "Film"
-                    }
-                };
-            }
-            else
-            {
-                return new
-                {
-                    blogPost.Id,
-                    blogPost.Date,
-                    blogPost.Description,
-                    blogPost.Review,
-                    Comments = commentsFe,
-                    RelatedMotionPicture = motionPicture
-                };
+                return StatusCode(500, ex.Message);
             }
         }
-
-
     }
 }

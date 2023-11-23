@@ -7,7 +7,9 @@ namespace FrameFiesta.Database
     {
         Task<User> Login(string userIdentification, string password);
 
-        Task<bool> Register<T>(RegisterRequest registerRequest);
+        Task<bool> DeleteUser(string userIdentification, string password);
+
+        Task<User> Register<T>(RegisterRequest registerRequest);
 
         Task<bool> IsCollectionEmptyAsync<T>(IMongoCollection<T> collection);
 
@@ -15,10 +17,10 @@ namespace FrameFiesta.Database
 
         Task<bool> DeleteComment(string userIdentification, string password, string blogId, string commentId);
 
-        Task<BlogPostFe> AddBlogPost(string description, string review, MotionPicture motionPicture);
+        Task<BlogPostFe> AddBlogPost(BlogPostDb blogPost);
 
         Task<List<BlogPostFe>> GetAllBlogPosts();
 
-        Task<List<UserDB>> GetAllUsers();
+        Task<List<UserDb>> GetAllUsers();
     }
 }

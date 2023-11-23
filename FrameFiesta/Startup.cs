@@ -56,7 +56,6 @@ public class Startup
 
         services.AddControllers().AddNewtonsoftJson(options =>
         {
-            //options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             options.SerializerSettings.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.None;
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 

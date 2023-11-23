@@ -4,6 +4,6 @@
     {
         public string Id { get; set; } = "Entities";
         public List<BlogPostDb> BlogPosts { get; set; } = new List<BlogPostDb>();
-        public List<UserDB> Users { get; set; } = new List<UserDB>();
+        public List<UserDb> Users { get; set; } = new List<UserDb>();
     }
 }

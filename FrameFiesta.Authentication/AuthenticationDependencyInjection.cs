@@ -7,7 +7,6 @@ namespace FrameFiesta.Authentication
         public static void AddAuthenticationService(this IServiceCollection services)
         {
             services.AddSingleton<ICryptographyService, CryptographyService>();
-            services.AddSingleton<IAuthenticationService, AuthentificationService>();
         }
     }
 }

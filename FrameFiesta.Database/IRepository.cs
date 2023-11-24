@@ -7,19 +7,16 @@ namespace FrameFiesta.Database
     {
         DatabaseConfiguration GetConfiguration();
 
-        Task<BlogPostDb> Get(int id);
+        IMongoCollection<FrameFiestaDocument> GetCollection();
 
-        Task<bool> Post(BlogPostDb blog);
-
-        Task<bool> Update(BlogPostDb blog);
-
-        Task<bool> Delete(int id);
+        Task<bool> UpdateAsync<T>(FilterDefinition<T> filter, UpdateDefinition<T> update, IMongoCollection<T> collection);
 
         Task<string> GetSalt(string userIdentification);
 
         IMongoDatabase GetDatabase();
 
         DatabaseConfiguration GetDatabaseConfiguration();
+
         Task PostAsync(FrameFiestaDocument frameFiestaDocument);
     }
 }

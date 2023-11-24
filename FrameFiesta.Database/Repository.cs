@@ -1,8 +1,5 @@
-﻿using FrameFiesta.Authentication;
-using FrameFiesta.Contracts.Models;
-using MongoDB.Bson;
+﻿using FrameFiesta.Contracts.Models;
 using MongoDB.Driver;
-using System.Collections;
 
 namespace FrameFiesta.Database
 {
@@ -28,14 +25,14 @@ namespace FrameFiesta.Database
             return _databaseConfiguration;
         }
 
-        public Task<bool> Delete(int id)
+        public IMongoCollection<FrameFiestaDocument> GetCollection()
         {
-            throw new NotImplementedException();
+            return GetDatabase().GetCollection<FrameFiestaDocument>(GetDatabaseConfiguration().CollectionName);
         }
 
-        public Task<BlogPostDb> Get(int id)
+        public async Task<bool> UpdateAsync<T>(FilterDefinition<T> filter, UpdateDefinition<T> update, IMongoCollection<T> collection)
         {
-            throw new NotImplementedException();
+            return (await collection.UpdateOneAsync(filter, update).ConfigureAwait(false)).ModifiedCount > 0;
         }
 
         public DatabaseConfiguration GetConfiguration()
@@ -63,20 +60,10 @@ namespace FrameFiesta.Database
             return null;
         }
 
-        public Task<bool> Post(BlogPostDb blog)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task PostAsync(FrameFiestaDocument frameFiestaDocument)
         {
             var collection = _database.GetCollection<FrameFiestaDocument>(_databaseConfiguration.CollectionName);
-            await collection.InsertOneAsync(frameFiestaDocument);
-        }
-
-        public Task<bool> Update(BlogPostDb blog)
-        {
-            throw new NotImplementedException();
+            await collection.InsertOneAsync(frameFiestaDocument).ConfigureAwait(false);
         }
     }
 }

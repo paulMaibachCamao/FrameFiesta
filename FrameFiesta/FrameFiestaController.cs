@@ -55,7 +55,7 @@ namespace FrameFiesta.Api
         }
 
         [HttpDelete("user")]
-        public async Task<IActionResult> DeleteUserAsync(string userIdentification,[FromBody] string password)
+        public async Task<IActionResult> DeleteUserAsync([FromBody] string userIdentification,[FromBody] string password)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace FrameFiesta.Api
         }
 
         [HttpPut("comment")]
-        public async Task<IActionResult> AddComment(string userIdentification, [FromBody] string password, string blogId, string comment)
+        public async Task<IActionResult> AddComment([FromBody] string userIdentification, [FromBody] string password, string blogId, string comment)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace FrameFiesta.Api
         }
 
         [HttpDelete("comment")]
-        public async Task<IActionResult> DeleteComment(string userIdentification, [FromBody] string password, string blogId, string commentId)
+        public async Task<IActionResult> DeleteComment([FromBody] string userIdentification, [FromBody] string password, string blogId, string commentId)
         {
             try
             {

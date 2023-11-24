@@ -78,6 +78,8 @@ namespace FrameFiesta.Utilities.ExtensionMethods.Models
                         series.InitialRelease,
                         series.Seasons,
                         series.Episodes,
+                        series.AgeRating,
+                        series.Budget,
                         Type = "Series"
                     }
                 };
@@ -102,6 +104,8 @@ namespace FrameFiesta.Utilities.ExtensionMethods.Models
                         film.Genres,
                         film.InitialRelease,
                         film.RunTime,
+                        film.AgeRating,
+                        film.Budget,
                         Type = "Film"
                     }
                 };

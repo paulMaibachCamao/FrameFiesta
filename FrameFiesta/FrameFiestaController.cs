@@ -55,11 +55,11 @@ namespace FrameFiesta.Api
         }
 
         [HttpDelete("user")]
-        public async Task<IActionResult> DeleteUserAsync([FromBody] string userIdentification,[FromBody] string password)
+        public async Task<IActionResult> DeleteUserAsync([FromBody] LoginRequest user)
         {
             try
             {
-                var result = await _databaseService.DeleteUser(userIdentification, password).ConfigureAwait(false);
+                var result = await _databaseService.DeleteUser(user.UserIdentification, user.Password).ConfigureAwait(false);
                 return result == true ? Ok(result) : BadRequest(result);
             }
             catch(Exception ex)
@@ -89,11 +89,11 @@ namespace FrameFiesta.Api
         }
 
         [HttpPut("comment")]
-        public async Task<IActionResult> AddComment([FromBody] string userIdentification, [FromBody] string password, string blogId, string comment)
+        public async Task<IActionResult> AddComment([FromBody] LoginRequest user, string blogId, string comment)
         {
             try
             {
-                var result = await _databaseService.AddComment(userIdentification, password, blogId, comment).ConfigureAwait(false);
+                var result = await _databaseService.AddComment(user.UserIdentification, user.Password, blogId, comment).ConfigureAwait(false);
                 return result != null ? Ok(result) : StatusCode(500, null);
             }
             catch (Exception ex)
@@ -103,11 +103,11 @@ namespace FrameFiesta.Api
         }
 
         [HttpDelete("comment")]
-        public async Task<IActionResult> DeleteComment([FromBody] string userIdentification, [FromBody] string password, string blogId, string commentId)
+        public async Task<IActionResult> DeleteComment([FromBody] LoginRequest user, string blogId, string commentId)
         {
             try
             {
-                var result = await _databaseService.DeleteComment(userIdentification, password, blogId, commentId).ConfigureAwait(false);
+                var result = await _databaseService.DeleteComment(user.UserIdentification, user.Password, blogId, commentId).ConfigureAwait(false);
                 return result == true ? Ok(result) : StatusCode(500, null);
             }
             catch (Exception ex)

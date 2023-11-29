@@ -89,11 +89,11 @@ namespace FrameFiesta.Api
         }
 
         [HttpPut("comment")]
-        public async Task<IActionResult> AddComment([FromBody] LoginRequest user, string blogId, string comment)
+        public async Task<IActionResult> AddComment([FromBody] LoginCommentData loginCommentData, string blogId)
         {
             try
             {
-                var result = await _databaseService.AddComment(user.UserIdentification, user.Password, blogId, comment).ConfigureAwait(false);
+                var result = await _databaseService.AddComment(loginCommentData.UserIdentification, loginCommentData.Password, blogId, loginCommentData.Comment).ConfigureAwait(false);
                 return result != null ? Ok(result) : StatusCode(500, null);
             }
             catch (Exception ex)

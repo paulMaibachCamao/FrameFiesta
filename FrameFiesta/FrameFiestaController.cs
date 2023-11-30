@@ -60,9 +60,13 @@ namespace FrameFiesta.Api
             try
             {
                 var result = await _databaseService.DeleteUser(user.UserIdentification, user.Password).ConfigureAwait(false);
-                return result == true ? Ok(result) : BadRequest(result);
+                if (!result)
+                {
+                    return NotFound("User not found");
+                }
+                return Ok(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }
@@ -94,7 +98,11 @@ namespace FrameFiesta.Api
             try
             {
                 var result = await _databaseService.AddComment(loginCommentData.UserIdentification, loginCommentData.Password, blogId, loginCommentData.Comment).ConfigureAwait(false);
-                return result != null ? Ok(result) : StatusCode(500, null);
+                if (result == null)
+                {
+                    return NotFound("User not found");
+                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -108,7 +116,11 @@ namespace FrameFiesta.Api
             try
             {
                 var result = await _databaseService.DeleteComment(user.UserIdentification, user.Password, blogId, commentId).ConfigureAwait(false);
-                return result == true ? Ok(result) : StatusCode(500, null);
+                if (!result)
+                {
+                    return NotFound("Comment not found");
+                }
+                return Ok(result);
             }
             catch (Exception ex)
             {

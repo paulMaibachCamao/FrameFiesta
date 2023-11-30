@@ -2,8 +2,17 @@ Einleitung
 
 Das Backend zum BT-S Schulprojekt im 3. Lehrjahr - FrameFiesta
 
+Das Backend ist nach dem Klonen des Repository ausführbar, jedoch erfüllt es erst mit der Datenbank die vollständige Funktion
+
 Datenbank mit MongoDBCompass
-https://www.mongodb.com/try/download/compass
+
+Herunterladbar unter: https://www.mongodb.com/try/download/compass
+
+Die Standardeinstellungen zum Connecten benutzen, die URL im Backend in der appsettings.json beim ConnectionString einfügen
+
+![image](https://github.com/paulMaibachCamao/FrameFiesta/assets/101870362/97b4d41d-dec6-4ec0-b969-a3470ec312d3)
+
+![image](https://github.com/paulMaibachCamao/FrameFiesta/assets/101870362/5a8ec395-0490-4dca-97bb-f70c783fd0db)
 
 Einspielen der Dummydaten mit Postman
 

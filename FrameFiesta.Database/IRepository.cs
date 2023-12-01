@@ -11,8 +11,6 @@ namespace FrameFiesta.Database
 
         Task<bool> UpdateAsync<T>(FilterDefinition<T> filter, UpdateDefinition<T> update, IMongoCollection<T> collection);
 
-        Task<string> GetSalt(string userIdentification);
-
         IMongoDatabase GetDatabase();
 
         DatabaseConfiguration GetDatabaseConfiguration();

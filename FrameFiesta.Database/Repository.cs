@@ -40,26 +40,6 @@ namespace FrameFiesta.Database
             return _databaseConfiguration;
         }
 
-        public async Task<string> GetSalt(string userIdentification)
-        {
-            var collection = _database.GetCollection<FrameFiestaDocument>(_databaseConfiguration.CollectionName);
-
-            var filter = Builders<FrameFiestaDocument>.Filter.ElemMatch(
-                doc => doc.Users,
-                user => user.Name == userIdentification || user.Email == userIdentification);
-
-            var frameFiestaDocument = collection.Find(filter).FirstOrDefault();
-
-            if (frameFiestaDocument != null)
-            {
-                var user = frameFiestaDocument.Users.Find(u => u.Name == userIdentification || u.Email == userIdentification);
-                if (user != null)
-                    return user.Salt;
-            }
-
-            return null;
-        }
-
         public async Task PostAsync(FrameFiestaDocument frameFiestaDocument)
         {
             var collection = _database.GetCollection<FrameFiestaDocument>(_databaseConfiguration.CollectionName);

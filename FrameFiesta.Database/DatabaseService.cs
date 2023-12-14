@@ -4,6 +4,7 @@ using FrameFiesta.Utilities.ExtensionMethods.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using System.Web.Helpers;
 
 namespace FrameFiesta.Database
 {
@@ -111,7 +112,7 @@ namespace FrameFiesta.Database
             {
                 Name = registerRequest.Name,
                 Email = registerRequest.Email,
-                Salt = _cryptographyService.GenerateSalt(),
+                Salt = Crypto.GenerateSalt()
             };
 
             newUser.Password = _cryptographyService.Hash(registerRequest.Password, newUser.Salt);

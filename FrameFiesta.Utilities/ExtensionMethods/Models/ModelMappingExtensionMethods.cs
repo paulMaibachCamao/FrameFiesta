@@ -15,31 +15,30 @@ namespace FrameFiesta.Utilities.ExtensionMethods.Models
             };
         }
 
-            public static BlogPostFe ToBlogPostFe(this BlogPostDb blogPostDb, IEnumerable<UserDb> users)
+        public static BlogPostFe ToBlogPostFe(this BlogPostDb blogPostDb, IEnumerable<UserDb> users)
+        {
+            var commentsFe = blogPostDb.Comments.Select(bc =>
             {
-                var commentsFe = blogPostDb.Comments.Select(bc =>
+                var user = users.FirstOrDefault(u => u.Id == bc.UserId);
+                return new CommentFe
                 {
-                    var user = users.FirstOrDefault(u => u.Id == bc.UserId);
-                    return new CommentFe
-                    {
-                        Id = bc.CommentId,
-                        Text = user?.Comments.FirstOrDefault(uc => uc.ID == bc.CommentId)?.Text,
-                        Date = user?.Comments.FirstOrDefault(uc => uc.ID == bc.CommentId)?.CreatedAt ?? default,
-                        Name = user?.Name
-                    };
-                }).ToList();
-
-                return new BlogPostFe
-                {
-                    Id = blogPostDb.Id,
-                    Date = blogPostDb.Date,
-                    Description = blogPostDb.Description,
-                    Review = blogPostDb.Review,
-                    RelatedMotionPicture = blogPostDb.RelatedMotionPicture,
-                    Comments = commentsFe
+                    Id = bc.CommentId,
+                    Text = user?.Comments.FirstOrDefault(uc => uc.ID == bc.CommentId)?.Text,
+                    Date = user?.Comments.FirstOrDefault(uc => uc.ID == bc.CommentId)?.CreatedAt ?? default,
+                    Name = user?.Name
                 };
-            }
+            }).ToList();
 
+            return new BlogPostFe
+            {
+                Id = blogPostDb.Id,
+                Date = blogPostDb.Date,
+                Description = blogPostDb.Description,
+                Review = blogPostDb.Review,
+                RelatedMotionPicture = blogPostDb.RelatedMotionPicture,
+                Comments = commentsFe
+            };
+        }
 
         public static object ConvertToJsonObject(this BlogPostFe blogPost, IEnumerable<UserDb> users)
         {

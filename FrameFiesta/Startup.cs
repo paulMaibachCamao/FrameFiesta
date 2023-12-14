@@ -1,12 +1,11 @@
+using FrameFiesta.Api;
+using FrameFiesta.Authentication;
 using FrameFiesta.Contracts.Models;
 using FrameFiesta.Database;
-using FrameFiesta.Authentication;
-using Microsoft.OpenApi.Models;
-using FrameFiesta.Api;
-using MongoDB.Bson.Serialization.Conventions;
-using MongoDB.Bson.Serialization;
 using JsonSubTypes;
-using Newtonsoft.Json.Serialization;
+using Microsoft.OpenApi.Models;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Conventions;
 
 public class Startup
 {

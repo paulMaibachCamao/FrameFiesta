@@ -23,7 +23,7 @@ jobs:
           node-version: '14' # Set up node version, Bruno CLI requires Node.js
 
       - name: Install Bruno CLI
-        run: npm install -g @brunolabs/cli # Installs Bruno CLI globally using npm
+        run: npm install -g @usebruno/cli # Installs Bruno CLI globally using npm
 
       - name: Get Current Date and Time
         id: datetime

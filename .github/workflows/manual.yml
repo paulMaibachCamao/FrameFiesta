@@ -29,13 +29,10 @@ jobs:
         id: datetime
         run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
 
-      - name: Make Directory for results
-        run: mkdir -p testResults
-
       - name: Run API Testing Collection
         run: |
-          cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
-          bru run . --output testResults/${{ env.DATETIME }}_report.json --insecure
+          cd ./FrameFiesta.Bruno
+          bru run FrameFiesta-Api-Testing --output results/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2

@@ -27,9 +27,9 @@ Die Standardeinstellungen zum Connecten benutzen, die `URL` im Backend in der `a
 Falls nötig, muss nun [Postman](https://www.postman.com/downloads/) installiert werden.
 Nun muss man die `Postman Collection` und die `Dummydaten` Dateien herunterladen.
 
-[FrameFiesta.postman_collection.json](https://github.com/paulMaibachCamao/FrameFiesta/files/13513226/FrameFiesta.postman_collection.json)
+[FrameFiesta.postman_collection.json](https://github.com/paulMaibachCamao/FrameFiesta/files/13752813/FrameFiesta.postman_collection.json)
 
-[DummyData.json](https://github.com/paulMaibachCamao/FrameFiesta/files/13513292/DummyData.json)
+[DummyDaten.json](https://github.com/paulMaibachCamao/FrameFiesta/files/13752820/DummyDaten.json)
 
 Bevor man die Daten einspielen kann, müssen die Datenbank und das Backend im Hintergrund laufen.
 

@@ -1,0 +1,33 @@
+# This is a simple YAML file for a CI/CD pipeline that triggers API testing using Bruno CLI on push to any branch
+
+name: API Testing Workflow
+
+# Defines the event for the workflow
+on:
+  push:
+    branches:
+      - '*' # This indicates all branches, adjust as necessary
+
+jobs:
+  run-api-tests:
+    name: Run API Tests
+    runs-on: ubuntu-latest # Specifies the runner environment
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2 # Checks out your repository under $GITHUB_WORKSPACE, so your workflow can access it
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Set up node version, Bruno CLI requires Node.js
+
+      - name: Install Bruno CLI
+        run: npm install -g @brunolabs/cli # Installs Bruno CLI globally using npm
+
+      - name: Get Current Date and Time
+        id: datetime
+        run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+
+      - name: Run API Testing Collection
+        run: bruno run "FrameFiesta.Bruno\FrameFiesta-Api-Testing" --output "FrameFiesta.Bruno\results\${{ env.DATETIME }}_report.json" --insecure

@@ -29,8 +29,8 @@ jobs:
         id: datetime
         run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
 
-      - name: Change to Collection Directory
-        run: cd FrameFiesta.Bruno
+      - name: Make Directory for results
+        run: mkdir -p testResults
 
       - name: Run API Testing Collection
-        run: bru run ./FrameFiesta-Api-Testing --insecure
+        run: bru run ./FrameFiesta-Api-Testing --output testResults/${{ env.DATETIME }}_report.json --insecure

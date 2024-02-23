@@ -30,4 +30,4 @@ jobs:
         run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
 
       - name: Run API Testing Collection
-        run: bru run "FrameFiesta.Bruno/FrameFiesta-Api-Testing" --output "FrameFiesta.Bruno/results/${{ env.DATETIME }}_report.json" --insecure
+        run: bru run "FrameFiesta-Api-Testing" --insecure

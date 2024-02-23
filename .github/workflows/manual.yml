@@ -34,3 +34,9 @@ jobs:
 
       - name: Run API Testing Collection
         run: bru run ./FrameFiesta-Api-Testing --output testResults/${{ env.DATETIME }}_report.json --insecure
+
+      - name: Output the run Details
+        uses: actions/upload-artifact@v2
+        with: 
+          name: RunReports
+          path: testResults

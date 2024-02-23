@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14' # Set up node version, Bruno CLI requires Node.js
+          node-version: '20'
 
       - name: Install Bruno CLI
         run: npm install -g @usebruno/cli # Installs Bruno CLI globally using npm
@@ -33,4 +33,4 @@ jobs:
         run: cd FrameFiesta.Bruno
 
       - name: Run API Testing Collection
-        run: bru run "FrameFiesta-Api-Testing" --insecure
+        run: bru run ./FrameFiesta-Api-Testing --insecure

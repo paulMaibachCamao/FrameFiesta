@@ -33,7 +33,7 @@ jobs:
         run: mkdir -p testResults
 
       - name: Run API Testing Collection
-        run: bru run ./FrameFiesta.Bruno/FrameFiesta-Api-Testing --output testResults/${{ env.DATETIME }}_report.json --insecure
+        run: bru run FrameFiesta/FrameFiesta.Bruno/FrameFiesta-Api-Testing --output testResults/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2

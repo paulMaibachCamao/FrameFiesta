@@ -31,11 +31,11 @@ jobs:
 
       - name: Run API Testing Collection
         run: |
-          cd ./FrameFiesta.Bruno
-          bru run FrameFiesta-Api-Testing --output results/${{ env.DATETIME }}_report.json --insecure
+          cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
+          bru run . --output results/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2
         with: 
           name: RunReports
-          path: testResults
+          path: ./FrameFiesta.Bruno/results

@@ -32,7 +32,7 @@ jobs:
 
       - name: Run API Testing Collection
         run: |
-          cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
+          cd ./FrameFiesta.Bruno/Simple Book API
           bru run . --output ../results/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details

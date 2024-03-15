@@ -1,0 +1,28 @@
+meta {
+  name: List of books
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/books?type=fiction&limit=2
+  body: none
+  auth: none
+}
+
+query {
+  type: fiction
+  limit: 2
+}
+
+tests {
+   const response = res.getBody();
+   
+   const fictionBook = response.filter((book) => book.available === true);
+   
+   bru.setEnvVar("bookId", fictionBook[0].id);
+   
+   test("is it fiction", () => {
+       expect(fictionBook[0].type).to.equal("fiction");
+  })
+}

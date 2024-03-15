@@ -1,0 +1,19 @@
+meta {
+  name: Get single book
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/books/{{bookId}}
+  body: none
+  auth: none
+}
+
+tests {
+   const response = res.getBody();
+   
+   test("Is in stock", () => {
+       expect(response['current-stock']).to.be.above(0);
+   })
+}

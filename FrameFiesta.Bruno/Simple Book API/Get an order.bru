@@ -1,0 +1,27 @@
+meta {
+  name: Get an order
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/orders/{{orderId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+tests {
+  test("Statuscode is 200", () => {
+      expect(res.getStatus()).to.equal(200);
+   })
+   
+   const response = res.getBody();
+   
+   test("Correct order id", () => {
+       expect(response.id).to.be.equal(bru.getEnvVar("orderId"))
+   })
+}

@@ -1,0 +1,36 @@
+meta {
+  name: Order book
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  const customerName = faker.person.firstName();
+  const bookId = bru.getEnvVar("bookId");
+  
+  req.setBody({
+    bookId,
+    customerName
+  })
+}
+
+tests {
+  const response = res.getBody();
+   
+  test("Successfully ordered book", () => {
+   expect(response['created']).to.be.true;
+   })
+   
+   bru.setEnvVar("orderId", response["orderId"]);
+}

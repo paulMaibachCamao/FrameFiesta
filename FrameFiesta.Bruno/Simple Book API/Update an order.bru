@@ -1,0 +1,30 @@
+meta {
+  name: Update an order
+  type: http
+  seq: 10
+}
+
+patch {
+  url: {{baseUrl}}/orders/{{orderId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "customerName": "{{$randomFullName}}"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  const customerName = faker.person.fullName();
+  
+  req.setBody({
+    customerName
+  })
+}

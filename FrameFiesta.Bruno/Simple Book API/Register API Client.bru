@@ -1,0 +1,31 @@
+meta {
+  name: Register API Client
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api-clients
+  body: json
+  auth: none
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  const clientName = faker.person.firstName();
+  const clientEmail = faker.internet.email();
+  
+  req.setBody({
+    clientName,
+    clientEmail
+  })
+}
+
+script:post-response {
+  bru.setEnvVar("accessToken", res.getBody()['accessToken']);
+}
+
+tests {
+  // var jsonData = JSON.parse(responseBody);
+  // pm.collectionVariables.set("accessToken", jsonData["accessToken"]);
+}

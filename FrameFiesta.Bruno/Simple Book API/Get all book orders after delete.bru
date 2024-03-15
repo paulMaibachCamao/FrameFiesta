@@ -1,0 +1,30 @@
+meta {
+  name: Get all book orders after delete
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/orders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{accessToken}}
+}
+
+body:json {
+  {
+      "bookId": 1,
+      "customerName": "John"
+  }
+}
+
+tests {
+   test("Order not in list anymore", () => {
+       const jsonData = res.getBody();
+       const idExists = jsonData.some(item => item.id === bru.getEnvVar("orderId"));
+       expect(idExists).to.be.false;
+   })
+}

@@ -31,11 +31,9 @@ jobs:
         run: mkdir -p FrameFiesta/FrameFiesta.Bruno/results
 
       - name: Run API Testing Collection
-        env: 
-            baseUrl: ${{ secrets.BASEURL }}
         run: |
           cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
-          bru run . --env baseUrl --output ../results/${{ env.DATETIME }}_report.json --insecure
+          bru run . --env-var baseUrl=${{ secrets.BASEURL }}  --output ../results/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2

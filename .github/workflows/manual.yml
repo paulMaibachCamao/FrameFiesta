@@ -10,12 +10,11 @@ on:
 
 jobs:
   run-api-tests:
-    name: Run API Tests
-    runs-on: ubuntu-latest # Specifies the runner environment
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2 # Checks out your repository under $GITHUB_WORKSPACE, so your workflow can access it
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -23,19 +22,21 @@ jobs:
           node-version: '20'
 
       - name: Install Bruno CLI
-        run: npm install -g @usebruno/cli # Installs Bruno CLI globally using npm
+        run: npm install -g @usebruno/cli
 
       - name: Get Current Date and Time
-        id: datetime
         run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+
+      - name: Create Output Directory
+        run: mkdir -p FrameFiesta/FrameFiesta.Bruno/results
 
       - name: Run API Testing Collection
         run: |
           cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
-          bru run . --output results/${{ env.DATETIME }}_report.json --insecure
+          bru run . --output ../results/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2
         with: 
           name: RunReports
-          path: ./FrameFiesta.Bruno/results
+          path: FrameFiesta/FrameFiesta.Bruno/results

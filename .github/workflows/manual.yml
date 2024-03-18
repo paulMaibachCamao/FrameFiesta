@@ -24,12 +24,6 @@ jobs:
       - name: Install Bruno CLI
         run: npm install -g @usebruno/cli
 
-      - name: Create .env file
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_BASEURL: 'https://simple-books-api.glitch.me'
-          file_name: .env
-
       - name: Get Current Date and Time
         run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
 
@@ -38,11 +32,8 @@ jobs:
 
       - name: Run API Testing Collection
         run: |
-          set -a
-          source .env
-          set +a
           cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
-          bru run . --env .env --output ../results/${{ env.DATETIME }}_report.json --insecure
+          bru run . --env Simple Book Api --output ../results/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2

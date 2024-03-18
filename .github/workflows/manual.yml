@@ -33,7 +33,7 @@ jobs:
       - name: Run API Testing Collection
         run: |
           cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
-          bru run . --output ../results/${{ env.DATETIME }}_report.json --insecure
+          bru run . --env Simple Book Api --output ../results/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2

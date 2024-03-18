@@ -42,7 +42,7 @@ jobs:
           source .env
           set +a
           cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
-          bru run . --env . --output ../results/${{ env.DATETIME }}_report.json --insecure
+          bru run . --env .env --output ../results/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2

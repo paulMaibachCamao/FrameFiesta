@@ -1,12 +1,9 @@
-# This is a simple YAML file for a CI/CD pipeline that triggers API testing using Bruno CLI on push to any branch
-
 name: API Testing Workflow
 
-# Defines the event for the workflow
 on:
   push:
     branches:
-      - '*' # This indicates all branches, adjust as necessary
+      - '*'
 
 jobs:
   run-api-tests:
@@ -41,3 +38,11 @@ jobs:
         with: 
           name: RunReports
           path: ./results
+
+      - name: Commit results
+        run: |
+          git config --global user.email "pipeline@example.com"
+          git config --global user.name "CI/CD"
+          git add FrameFiesta/FrameFiesta.Bruno/results/*
+          git commit -m "Add API Test Results for ${{ env.DATETIME }}"
+          git diff --quiet && git diff --staged --quiet || git push

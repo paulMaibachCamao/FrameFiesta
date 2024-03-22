@@ -41,7 +41,7 @@ jobs:
 
       - name: Commit and Push Changes
         env:
-          PAT: ${{ env.PAT_TOKEN }}
+          PAT: ${{ secrets.PAT_TOKEN }}
         run: |
           git config --global user.email "pipeline@example.com"
           git config --global user.name "GitHub Actions by Paul"

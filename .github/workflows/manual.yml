@@ -47,4 +47,4 @@ jobs:
           git config --global user.name "GitHub Actions by Paul"
           git add .
           git commit -m "Add API Test Results" || echo "No changes to commit"
-          git push https://paulMaibachCamao:${PAT}@github.com/paulMaibachCamao/FrameFiesta.git
+          git push

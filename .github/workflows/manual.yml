@@ -21,7 +21,7 @@ jobs:
       - name: Setup Environment File
         run: |
           echo "vars {" > ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/framefiesta_env.bru
-          echo "  baseUrl: ${{ env.BASEURL }}" > ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/framefiesta_env.bru
+          echo "  baseUrl: ${{ vars.BASEURL }}" > ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/framefiesta_env.bru
           echo "}" > ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/framefiesta_env.bru
 
       - name: Install Bruno CLI

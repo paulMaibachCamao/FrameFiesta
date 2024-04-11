@@ -36,7 +36,7 @@ jobs:
         run: |
           cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
           npm install
-          bru run . --env framefiesta_env --output ${{ env.DATETIME }}_report.json --insecure
+          bru run . --env temp_framefiesta_env --output ${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2
@@ -44,8 +44,8 @@ jobs:
           name: RunReports
           path: ./results
 
-      - name: Restore Configuration File
-        run: git restore ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/framefiesta_env.bru
+      - name: Delete Temporary Environment File
+        run: rm ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/temp_framefiesta_env.bru
 
       - name: Commit and Push Changes
         env:

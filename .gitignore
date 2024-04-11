@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Ignoriere temporäre Umgebungsvariablendatei
+FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/temp_framefiesta_env.bru
+
 # User-specific files
 *.rsuser
 *.suo

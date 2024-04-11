@@ -18,13 +18,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Setup Environment File
-        run: |
-            echo 'vars {' > ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/framefiesta_env.bru
-            echo "  baseUrl: ${{ secrets.BASEURL }}" >> ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/framefiesta_env.bru
-            echo '}' >> ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/framefiesta_env.bru
-
-
       - name: Install Bruno CLI
         run: npm install -g @usebruno/cli
 

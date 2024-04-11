@@ -2,6 +2,7 @@
 {
     public class CryptographyService : ICryptographyService
     {
+        //
         public string Hash(string password, string salt)
         {
             using (var sha = new System.Security.Cryptography.SHA256Managed())

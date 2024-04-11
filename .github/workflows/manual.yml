@@ -44,6 +44,9 @@ jobs:
           name: RunReports
           path: ./results
 
+      - name: Restore Configuration File
+        run: git restore ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/framefiesta_env.bru
+
       - name: Commit and Push Changes
         env:
           PAT: ${{ secrets.PAT_TOKEN }}

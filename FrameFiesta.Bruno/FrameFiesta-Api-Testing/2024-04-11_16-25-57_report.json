@@ -1,0 +1,429 @@
+{
+  "summary": {
+    "totalRequests": 10,
+    "passedRequests": 10,
+    "failedRequests": 0,
+    "totalAssertions": 0,
+    "passedAssertions": 0,
+    "failedAssertions": 0,
+    "totalTests": 7,
+    "passedTests": 7,
+    "failedTests": 0
+  },
+  "results": [
+    {
+      "test": {
+        "filename": "API Status.bru"
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://simple-books-api.glitch.me/status",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:00 GMT",
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "15",
+          "connection": "close",
+          "x-powered-by": "Express",
+          "etag": "W/\"f-v/Y1JusChTxrQUzPtNAKycooOTA\""
+        },
+        "data": {
+          "status": "OK"
+        },
+        "responseTime": 136
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [],
+      "runtime": 0.145669265,
+      "suitename": "API Status"
+    },
+    {
+      "test": {
+        "filename": "Register API Client.bru"
+      },
+      "request": {
+        "method": "POST",
+        "url": "https://simple-books-api.glitch.me/api-clients",
+        "headers": {
+          "content-type": "application/json"
+        },
+        "data": {
+          "clientName": "Christelle",
+          "clientEmail": "Ashlee_Rice@yahoo.com"
+        }
+      },
+      "response": {
+        "status": 201,
+        "statusText": "Created",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:02 GMT",
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "82",
+          "connection": "close",
+          "x-powered-by": "Express",
+          "etag": "W/\"52-9I2fNH6vsirX6bj+emMKeX8MruE\""
+        },
+        "data": {
+          "accessToken": "32e1c4c929069cb07ce278a57e7af6f8d71b3d406036668ec7dd4a3e7c1a1f6a"
+        },
+        "responseTime": 321
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [],
+      "runtime": 1.714995999,
+      "suitename": "Register API Client"
+    },
+    {
+      "test": {
+        "filename": "List of books.bru"
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://simple-books-api.glitch.me/books?type=fiction&limit=2",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:02 GMT",
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "136",
+          "connection": "close",
+          "x-powered-by": "Express",
+          "etag": "W/\"88-wm+jqqvW6HAPIeRFMZ4T5ehUPYs\""
+        },
+        "data": [
+          {
+            "id": 1,
+            "name": "The Russian",
+            "type": "fiction",
+            "available": true
+          },
+          {
+            "id": 3,
+            "name": "The Vanishing Half",
+            "type": "fiction",
+            "available": true
+          }
+        ],
+        "responseTime": 335
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [
+        {
+          "description": "is it fiction",
+          "status": "pass",
+          "uid": "StKkf45wcnU9ckdUw-JbJ"
+        }
+      ],
+      "runtime": 0.339924614,
+      "suitename": "List of books"
+    },
+    {
+      "test": {
+        "filename": "Get single book.bru"
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://simple-books-api.glitch.me/books/1",
+        "headers": {}
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:02 GMT",
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "161",
+          "connection": "close",
+          "x-powered-by": "Express",
+          "etag": "W/\"a1-Mcj+H8w3JMJfpTU/R3TvAdr/Z7E\""
+        },
+        "data": {
+          "id": 1,
+          "name": "The Russian",
+          "author": "James Patterson and James O. Born",
+          "isbn": "1780899475",
+          "type": "fiction",
+          "price": 12.98,
+          "current-stock": 12,
+          "available": true
+        },
+        "responseTime": 62
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [
+        {
+          "description": "Is in stock",
+          "status": "pass",
+          "uid": "hrp3cBTrQMljwsVmelbmQ"
+        }
+      ],
+      "runtime": 0.06617495,
+      "suitename": "Get single book"
+    },
+    {
+      "test": {
+        "filename": "Order book.bru"
+      },
+      "request": {
+        "method": "POST",
+        "url": "https://simple-books-api.glitch.me/orders",
+        "headers": {
+          "Authorization": "Bearer 32e1c4c929069cb07ce278a57e7af6f8d71b3d406036668ec7dd4a3e7c1a1f6a",
+          "content-type": "application/json"
+        },
+        "data": {
+          "bookId": 1,
+          "customerName": "Clara"
+        }
+      },
+      "response": {
+        "status": 201,
+        "statusText": "Created",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:04 GMT",
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "50",
+          "connection": "close",
+          "x-powered-by": "Express",
+          "etag": "W/\"32-kUjtqexXs101LbGomskYzvgzRPg\""
+        },
+        "data": {
+          "created": true,
+          "orderId": "QgWBafY6TcEH95R8RM7d-"
+        },
+        "responseTime": 613
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [
+        {
+          "description": "Successfully ordered book",
+          "status": "pass",
+          "uid": "DXxw46p6T-o2swpVyIQA5"
+        }
+      ],
+      "runtime": 1.4291646120000001,
+      "suitename": "Order book"
+    },
+    {
+      "test": {
+        "filename": "Get all book orders.bru"
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://simple-books-api.glitch.me/orders",
+        "headers": {
+          "Authorization": "Bearer 32e1c4c929069cb07ce278a57e7af6f8d71b3d406036668ec7dd4a3e7c1a1f6a",
+          "content-type": "application/json"
+        },
+        "data": {
+          "bookId": 1,
+          "customerName": "John"
+        }
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:04 GMT",
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "184",
+          "connection": "close",
+          "x-powered-by": "Express",
+          "etag": "W/\"b8-MwThGXaEpEoFZVMRqcb74yRoVsk\""
+        },
+        "data": [
+          {
+            "id": "QgWBafY6TcEH95R8RM7d-",
+            "bookId": 1,
+            "customerName": "Clara",
+            "createdBy": "40797edaf788fda3deb44405d607290656324cc105e1685422d3e8c573482127",
+            "quantity": 1,
+            "timestamp": 1712852763895
+          }
+        ],
+        "responseTime": 257
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [
+        {
+          "description": "Is the new order in list",
+          "status": "pass",
+          "uid": "8N4jUsBkbUkaHvwqyx02a"
+        }
+      ],
+      "runtime": 0.264985598,
+      "suitename": "Get all book orders"
+    },
+    {
+      "test": {
+        "filename": "Get an order.bru"
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://simple-books-api.glitch.me/orders/QgWBafY6TcEH95R8RM7d-",
+        "headers": {
+          "Authorization": "Bearer 32e1c4c929069cb07ce278a57e7af6f8d71b3d406036668ec7dd4a3e7c1a1f6a",
+          "content-type": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:04 GMT",
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "182",
+          "connection": "close",
+          "x-powered-by": "Express",
+          "etag": "W/\"b6-kPBP36uAQQaI5sR11si/VP4Z/Uc\""
+        },
+        "data": {
+          "id": "QgWBafY6TcEH95R8RM7d-",
+          "bookId": 1,
+          "customerName": "Clara",
+          "createdBy": "40797edaf788fda3deb44405d607290656324cc105e1685422d3e8c573482127",
+          "quantity": 1,
+          "timestamp": 1712852763895
+        },
+        "responseTime": 75
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [
+        {
+          "description": "Statuscode is 200",
+          "status": "pass",
+          "uid": "f3IzjY1ufMQDf9CL34Kv7"
+        },
+        {
+          "description": "Correct order id",
+          "status": "pass",
+          "uid": "VL4Edt_y6TBneHCG3Dgnt"
+        }
+      ],
+      "runtime": 0.080413833,
+      "suitename": "Get an order"
+    },
+    {
+      "test": {
+        "filename": "Delete an order.bru"
+      },
+      "request": {
+        "method": "DELETE",
+        "url": "https://simple-books-api.glitch.me/orders/QgWBafY6TcEH95R8RM7d-",
+        "headers": {
+          "Authorization": "Bearer 32e1c4c929069cb07ce278a57e7af6f8d71b3d406036668ec7dd4a3e7c1a1f6a",
+          "content-type": "application/json"
+        }
+      },
+      "response": {
+        "status": 204,
+        "statusText": "No Content",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:04 GMT",
+          "connection": "close",
+          "x-powered-by": "Express"
+        },
+        "data": "",
+        "responseTime": 325
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [],
+      "runtime": 0.327217589,
+      "suitename": "Delete an order"
+    },
+    {
+      "test": {
+        "filename": "Get all book orders after delete.bru"
+      },
+      "request": {
+        "method": "GET",
+        "url": "https://simple-books-api.glitch.me/orders",
+        "headers": {
+          "Authorization": "Bearer 32e1c4c929069cb07ce278a57e7af6f8d71b3d406036668ec7dd4a3e7c1a1f6a",
+          "content-type": "application/json"
+        },
+        "data": {
+          "bookId": 1,
+          "customerName": "John"
+        }
+      },
+      "response": {
+        "status": 200,
+        "statusText": "OK",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:05 GMT",
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "2",
+          "connection": "close",
+          "x-powered-by": "Express",
+          "etag": "W/\"2-l9Fw4VUO7kr8CvBlt4zaMCqXZ0w\""
+        },
+        "data": [],
+        "responseTime": 394
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [
+        {
+          "description": "Order not in list anymore",
+          "status": "pass",
+          "uid": "cF9QEyg78wkDd7xVhXWdl"
+        }
+      ],
+      "runtime": 0.39910715,
+      "suitename": "Get all book orders after delete"
+    },
+    {
+      "test": {
+        "filename": "Update an order.bru"
+      },
+      "request": {
+        "method": "PATCH",
+        "url": "https://simple-books-api.glitch.me/orders/QgWBafY6TcEH95R8RM7d-",
+        "headers": {
+          "Authorization": "Bearer 32e1c4c929069cb07ce278a57e7af6f8d71b3d406036668ec7dd4a3e7c1a1f6a",
+          "content-type": "application/json"
+        },
+        "data": {
+          "customerName": "Tracey Thompson"
+        }
+      },
+      "response": {
+        "status": 404,
+        "statusText": "Not Found",
+        "headers": {
+          "date": "Thu, 11 Apr 2024 16:26:05 GMT",
+          "content-type": "application/json; charset=utf-8",
+          "content-length": "51",
+          "connection": "close",
+          "x-powered-by": "Express",
+          "etag": "W/\"33-TANwDwOQUMd7+Ju1fxGmYbzda28\""
+        },
+        "data": {
+          "error": "No order with id QgWBafY6TcEH95R8RM7d-."
+        },
+        "responseTime": 58
+      },
+      "error": null,
+      "assertionResults": [],
+      "testResults": [],
+      "runtime": 0.721630126,
+      "suitename": "Update an order"
+    }
+  ]
+}

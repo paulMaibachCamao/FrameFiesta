@@ -20,8 +20,8 @@ jobs:
 
       - name: Setup Environment File
         run: |
-          sed -i 's|baseUrl: PLACEHOLDER_BASE_URL|baseUrl: ${{ secrets.BASEURL }}|' ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/framefiesta_env.bru
-
+          cp ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/framefiesta_env.bru ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/temp_framefiesta_env.bru
+          sed -i 's|baseUrl: PLACEHOLDER_BASE_URL|baseUrl: ${{ secrets.BASEURL }}|' ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/temp_framefiesta_env.bru
 
       - name: Install Bruno CLI
         run: npm install -g @usebruno/cli

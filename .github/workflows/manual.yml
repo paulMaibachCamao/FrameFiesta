@@ -20,7 +20,7 @@ jobs:
 
       - name: Setup Environment File
         run: |
-          sed -i 's|baseUrl: PLACEHOLDER_BASE_URL|baseUrl: ${{ secrets.BASEURL }}|' ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/framefiesta_env.bru
+          sed -i 's|baseUrl: PLACEHOLDER_BASE_URL|baseUrl: ${{ secrets.BASEURL }}|' ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/framefiesta_env.bru
 
 
       - name: Install Bruno CLI

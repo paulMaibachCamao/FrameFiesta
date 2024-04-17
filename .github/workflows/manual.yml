@@ -38,12 +38,6 @@ jobs:
           npm install
           bru run . --env temp_framefiesta_env --output ../results/${{ env.DATETIME }}_report.json --insecure
 
-      - name: Output the run Details
-        uses: actions/upload-artifact@v2
-        with: 
-          name: RunReports
-          path: ./results
-
       - name: Delete Temporary Environment File
         run: rm ./FrameFiesta.Bruno/FrameFiesta-Api-Testing/environments/temp_framefiesta_env.bru
 

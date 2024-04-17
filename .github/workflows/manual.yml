@@ -36,8 +36,7 @@ jobs:
         run: |
           cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
           npm install
-          cd ./FrameFiesta.Bruno/results
-          bru run . --env temp_framefiesta_env --output ${{ env.DATETIME }}_report.json --insecure
+          bru run . --env temp_framefiesta_env --output ../results/${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
         uses: actions/upload-artifact@v2

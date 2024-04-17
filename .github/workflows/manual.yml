@@ -36,6 +36,7 @@ jobs:
         run: |
           cd ./FrameFiesta.Bruno/FrameFiesta-Api-Testing
           npm install
+          cd ./FrameFiesta.Bruno/results
           bru run . --env temp_framefiesta_env --output ${{ env.DATETIME }}_report.json --insecure
 
       - name: Output the run Details
